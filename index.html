@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Useful bookmarklets</title>
+  <style>
+    html, body {
+      padding: 0;
+      margin: 0;
+    }
+    
+    .container {
+      padding: 24px;
+    }
+    .container div {
+      padding-top: 24px;
+    }
+    a.bookmarklet {
+      padding: 10px;
+      margin: 8px;
+      background: #eee;
+    }
+    a:hover {
+      position: relative;
+      top: 1px;
+      left: 1px;
+      background: #ddd;
+      /* padding: 10px */
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+      <div class="instructions">Drag these links to your bookmarks bar</div>
+      <div class="more-help">See <a href="https://www.youtube.com/watch?v=2QvHt88LkoQ">this video</a> for instructions on how to install a bookmarklet</div>
+      <div class="bookmarklets">
+          <a class="bookmarklet" id="slowdown">Slow Down Video</a> <a class="bookmarklet" id="speedup">Speed Up Video</a><br />
+      </div>
+      <!-- <a id="custom">Custom bookmarklet</a><br />
+      <textarea id="textarea">console.log(123);</textarea> -->
+</div>
+  <script>
+    const slowdown = document.getElementById('slowdown');
+    const speedup = document.getElementById('speedup');
+    const custom = document.getElementById('custom');
+    const textarea = document.getElementById('textarea');
+    const videoSpeeder = `(() => {
+  const video = Array.from(document.querySelectorAll('video')).find(v => !v.paused);
+  if (video) {
+    video.playbackRate $$$= .25;
+    Array.from(video.parentElement.querySelectorAll('.x-speedup')).forEach(e => e.remove());
+    const d = document.createElement('div');
+    d.className = 'x-speedup';
+    d.innerText = video.playbackRate + 'X';
+    d.style.cssText = \`position: absolute; top: \${video.offsetTop}px; left: \${video.offsetLeft}px; min-width: 40px; minHeight: 26px; text-align: center; background: black; color: white; transition: all 4s linear;\`;
+    video.parentElement.appendChild(d);
+    setTimeout(() => d.style.opacity = 0, 100);
+    setTimeout(() => {
+      d.remove();
+    }, 4000);
+  }
+})();
+`;
+    [slowdown, speedup].forEach((a, index) => {
+      a.href = 'javascript:' + videoSpeeder.replace('$$$', index ? '+' : '-');
+      a.addEventListener('click', () => {
+        alert('This bookmarklet is meant to be dragged to your bookmark bar and used from there')
+      });
+    })
+    // textarea.addEventListener('input', () => {
+    //   console.log(123)
+    // });
+  </script>
+</body>
+</html>
